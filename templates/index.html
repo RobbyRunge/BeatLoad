@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Beatload</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body>
+    <div class="card">
+        <div class="card-header">
+            <h1>Beat<span>load</span></h1>
+            <button class="settings-toggle" onclick="toggleSettings()">⚙ Settings</button>
+        </div>
+        <p class="subtitle" id="subtitle"></p>
+
+        <!-- Settings panel -->
+        <div class="settings-panel" id="settingsPanel">
+            <h2>Settings</h2>
+            <label for="pathInput">Download Path</label>
+            <div class="settings-row">
+                <input type="text" id="pathInput" placeholder="" />
+                <button onclick="savePath()">Save</button>
+            </div>
+            <div class="settings-feedback" id="settingsFeedback"></div>
+        </div>
+
+        <label for="url">URL</label>
+        <input type="text" id="url" placeholder="https://youtube.com/watch?v=..." />
+
+        <button id="btn" onclick="startDownload()">Download</button>
+
+        <div class="progress" id="progress">
+            <div class="progress-bar"></div>
+        </div>
+        <div class="status-box" id="status">Ready.</div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+
+</html>
