@@ -138,6 +138,12 @@ button:disabled { background: #333; color: #555; cursor: not-allowed; }
     font-size: 0.9rem;
     min-height: 48px;
     color: #aaa;
+    transition: border-color 0.2s;
+}
+
+.status-box.error {
+    border-color: #7a2020;
+    color: #e07070;
 }
 
 .progress {

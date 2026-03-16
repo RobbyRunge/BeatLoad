@@ -49,6 +49,8 @@ def index():
 def download():
     if status["running"]:
         return jsonify({"error": "Download already running."}), 429
+    if not settings["download_path"]:
+        return jsonify({"error": "No download path set. Open Settings and enter a path."}), 400
     url = request.json.get("url", "").strip()
     if not url:
         return jsonify({"error": "No URL provided."}), 400

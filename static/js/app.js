@@ -4,7 +4,21 @@ let polling = null;
 fetch('/settings').then(r => r.json()).then(data => {
     document.getElementById('pathInput').value = data.download_path;
     document.getElementById('subtitle').textContent = `YouTube → MP3 · ${data.download_path}`;
+    updateDownloadButton(data.download_path);
 });
+
+function updateDownloadButton(path) {
+    const btn = document.getElementById('btn');
+    if (!path) {
+        btn.disabled = true;
+        btn.title = 'Please set a download path in Settings first';
+        setStatus('Please set a download path in Settings first.', true);
+    } else {
+        btn.disabled = false;
+        btn.title = '';
+        setStatus('Ready.');
+    }
+}
 
 function toggleSettings() {
     document.getElementById('settingsPanel').classList.toggle('open');
@@ -23,6 +37,7 @@ async function savePath() {
     fb.textContent = data.message || data.error;
     if (res.ok) {
         document.getElementById('subtitle').textContent = `YouTube → MP3 · ${path}`;
+        updateDownloadButton(path);
         setTimeout(() => { fb.textContent = ''; }, 3000);
     }
 }
@@ -40,7 +55,7 @@ async function startDownload() {
     });
 
     const data = await res.json();
-    setStatus(data.message || data.error);
+    setStatus(data.message || data.error, !res.ok);
 
     if (res.ok) {
         polling = setInterval(pollStatus, 1500);
@@ -52,11 +67,12 @@ async function startDownload() {
 async function pollStatus() {
     const res = await fetch('/status');
     const data = await res.json();
-    setStatus(data.message);
+    const isError = data.message.startsWith('Error');
+    setStatus(data.message, isError);
     if (!data.running) {
         clearInterval(polling);
         setLoading(false);
-        if (!data.message.startsWith('Error')) {
+        if (!isError) {
             document.getElementById('url').value = '';
         }
     }
@@ -67,6 +83,8 @@ function setLoading(on) {
     document.getElementById('progress').classList.toggle('active', on);
 }
 
-function setStatus(msg) {
-    document.getElementById('status').textContent = msg;
+function setStatus(msg, isError = false) {
+    const box = document.getElementById('status');
+    box.textContent = msg;
+    box.classList.toggle('error', isError);
 }
